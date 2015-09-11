@@ -54,6 +54,9 @@ except Exception, error:
     exit()
 ########################################################################
 
+
+########################################################################
+
 def main():
     featureVector = []
     lat_wm  = [0.0] * 100
@@ -154,6 +157,12 @@ def main():
     # volcar el json a fichero
     with open('./tmp.json', 'w') as outfile:
         json.dump(new_data, outfile)
+
+    # eliminar los 2 ultimos caracteres para enganchar bien con footer
+    with open('./tmp.json', 'rb+') as f:
+        f.seek(0,2)                 # end of file
+        size=f.tell()               # the size...
+        f.truncate(size-2)          # truncate at that size - how ever many characters
 
     # Crear el fichero final
     origenes = sys.argv[1:]

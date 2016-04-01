@@ -13,6 +13,8 @@
 #	library configobj 			To install: "apt-get install python-configobj"
 ##################################################################################
 
+import time
+import datetime
 import sys
 import os
 import logging, logging.handlers
@@ -34,33 +36,39 @@ DB_FRONTEND_USER = config['mysql_user']
 DB_FRONTEND_PASSWORD = config['mysql_passwd']
 
 FILE_FOOTER = config['file_footer']
-FILE_JSON = config['directory_json'] + config['file_json']
+FILE_JSON = config['directory_json'] + '/' + config['file_json']
 
 #PID = "/var/run/generate_windfarm/generate_windfarm"
 
+
 ########################################################################
-# definicion y configuracion de logs
+
+# Se definen los logs internos que usaremos para comprobar errores
 try:
-    logger = logging.getLogger('generate_windfarm')
-    loggerHandler = logging.handlers.TimedRotatingFileHandler(LOG , 'midnight', 1, backupCount=LOG_FOR_ROTATE)
+    logger = logging.getLogger('remove_vessels_scheduler')
+    loggerHandler = logging.handlers.TimedRotatingFileHandler(LOG, 'midnight', 1, backupCount=10)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     loggerHandler.setFormatter(formatter)
     logger.addHandler(loggerHandler)
     logger.setLevel(logging.DEBUG)
-except Exception, error:
-    logger.error( '------------------------------------------------------------------')
-    logger.error( '[ERROR] Error writing log at ' + str(error))
-    logger.error( '------------------------------------------------------------------')
+except:
+    print '------------------------------------------------------------------'
+    print '[ERROR] Error writing log at %s' % LOG
+    print '[ERROR] Please verify path folder exits and write permissions'
+    print '------------------------------------------------------------------'
     exit()
-########################################################################
 
+########################################################################
 
 ########################################################################
 
 def main():
     while True:
-        logger.debug("Generar la windfarm")
-        
+
+        time.sleep (30)
+
+        logger.info ("Generar la windfarm")
+
         featureVector = []
         lat_wm  = [0.0] * 100
         lon_wm  = [0.0] * 100
@@ -175,7 +183,9 @@ def main():
             with open(FILE_FOOTER) as footer:
                 dest.write(footer.read())
 
-    sleep (60)
+        dest.close()
+        logger.info ("Done!")
+
 
 if __name__ == '__main__':
     main()

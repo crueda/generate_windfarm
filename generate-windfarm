@@ -1,0 +1,50 @@
+#!/bin/sh
+
+ulimit -Hn 200000
+ulimit -Sn 200000
+
+mode=$1    # start or stop
+
+basedir=/opt/generate_windfarm
+PROCESS="generate_windfarm"
+PID=`/usr/bin/pgrep -f $PROCESS`
+
+cd $basedir
+
+case "$mode" in
+  'start')
+    # Start daemon
+    # Guardamos el log anterior
+    echo "Starting generate windfarm"
+
+    ./generate_windfarm.sh > /dev/null 2>&1 &
+    ;;
+
+  'stop')
+    # Stop daemon.
+   if [  -n "$PID" ] ; then
+	echo "Finishing generate windfarm with PID $PID...."
+        kill $PID
+   else
+        echo "SUMO generate windfarm is already stopped."
+   fi
+    ;;
+  'status')
+   if [  -n "$PID" ] ; then
+        echo "SUMO generate windfarm is running with PID $PID."
+   else
+        echo "SUMO generate windfarm is stopped."
+   fi
+    ;;
+  'restart')
+    # Stop the service and regardless of whether it was
+    # running or not, start it again.
+    $0 stop
+    $0 start
+    ;;
+  *)
+    # usage
+    echo "Usage: $0 start|stop|status|restart"
+    exit 1
+    ;;
+esac

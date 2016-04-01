@@ -65,7 +65,7 @@ except:
 def main():
     while True:
 
-        time.sleep (30)
+        time.sleep (60)
 
         logger.info ("Generar la windfarm")
 

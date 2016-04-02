@@ -128,15 +128,15 @@ def main():
 
             lon1 = lon_wm[wm_a]
             lat1 = lat_wm[wm_a]
-            lon2 = lon_wm[wm_a]
+            lon2 = lon_wm[wm_b]
             lat2 = lat_wm[wm_b]
 
             vectorCoordinates1 = []
-            vectorCoordinates1.append(lon1)
             vectorCoordinates1.append(lat1)
+            vectorCoordinates1.append(lon1)
             vectorCoordinates2 = []
-            vectorCoordinates2.append(lon2)
             vectorCoordinates2.append(lat2)
+            vectorCoordinates2.append(lon2)
             vectorCoordinates = []
             vectorCoordinates.append(vectorCoordinates1)
             vectorCoordinates.append(vectorCoordinates2)
